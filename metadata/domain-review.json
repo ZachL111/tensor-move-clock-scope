@@ -1,0 +1,73 @@
+{
+  "repo": "tensor-move-clock-scope",
+  "language": "Elixir",
+  "category": "Chess and game engines",
+  "goal": "Build an Elixir toolkit that studies clock behavior through layout fixtures, with stable geometry snapshots and no production deployment claims.",
+  "review_model": {
+    "terms": [
+      "position pressure",
+      "move ordering",
+      "search width",
+      "endgame risk"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "position pressure",
+      "signal": 60,
+      "slack": 22,
+      "drag": 16,
+      "confidence": 75,
+      "score": 169,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "move ordering",
+      "signal": 45,
+      "slack": 35,
+      "drag": 19,
+      "confidence": 65,
+      "score": 133,
+      "lane": "watch"
+    },
+    {
+      "name": "edge",
+      "focus": "search width",
+      "signal": 71,
+      "slack": 27,
+      "drag": 13,
+      "confidence": 50,
+      "score": 180,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "endgame risk",
+      "signal": 62,
+      "slack": 46,
+      "drag": 9,
+      "confidence": 58,
+      "score": 201,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "position pressure",
+      "signal": 69,
+      "slack": 34,
+      "drag": 22,
+      "confidence": 48,
+      "score": 154,
+      "lane": "ship"
+    }
+  ]
+}
