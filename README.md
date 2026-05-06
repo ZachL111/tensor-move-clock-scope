@@ -1,43 +1,68 @@
 # tensor-move-clock-scope
 
-tensor-move-clock-scope is a Elixir project for chess and game engines. It focuses on this technical goal: Build an Elixir toolkit that studies clock behavior through layout fixtures, with stable geometry snapshots and no production deployment claims.
+`tensor-move-clock-scope` treats chess and game engines as a local verification problem. The Elixir implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
 
-## Why it exists
+## Tensor Move Clock Scope Checkpoints
 
-Small engineering tools are easiest to trust when their rules are explicit, testable, and cheap to run locally. This repository packages a focused model with fixture data and a local verification path so behavior can be reviewed without external services.
+Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
 
-## Features
+## What This Is For
 
-- Deterministic policy scoring over fixture scenarios.
-- Clear accept or review decisions based on a documented threshold.
-- A command-line or local test path for quick validation.
-- Golden fixture data for repeatable checks.
-- Minimal dependencies and a compact project layout.
+I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+
+## Project Layout
+
+- `lib`: library code
+- `test`: language test directory
+- `fixtures`: compact golden scenarios
+- `examples`: expanded scenario set
+- `metadata`: project constants and verification metadata
+- `docs`: operations and extension notes
+- `scripts`: local verification and audit commands
+
+## Useful Pieces
+
+- Includes extended examples for turn flow, including `recovery` and `degraded`.
+- Documents search limits tradeoffs in `docs/operations.md`.
+- Runs locally with a single verification command and no external credentials.
+- Stores project constants and verification metadata in `metadata/project.json`.
+- Adds a repository audit script that checks structure before running the language verifier.
 
 ## Architecture Notes
 
-The core module exposes a small scoring API. Inputs are simple numeric signals: demand, capacity, latency, risk, and weight. The score uses a threshold of 159, risk penalty 7, latency penalty 3, and weight bonus 4. Tests exercise the public API against the fixture cases in `fixtures/cases.csv`.
+The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying chess and game engines behavior without needing a service or database unless the language project itself is SQL. The Elixir project uses Mix and ExUnit with clear data maps for each scenario.
 
-## Setup
+## Tooling
 
-Install the Elixir toolchain and run commands from the repository root.
+Clone the repository, enter the directory, and run the verifier. No database server, cloud account, or token is required.
 
-## Usage
+## Case Study
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
-```
+`boundary` is the first example I would inspect because it lands on the `review` path with a score of 72. The broader file also keeps `degraded` at -101 and `recovery` at 192, which gives the model a useful low-to-high spread.
 
-The verification script builds or runs the project and checks the fixture decisions.
-
-## Tests
+## Local Workflow
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-## Limitations And Roadmap
+This runs the language-level build or test path against the compact fixture set.
 
-- The fixture set is intentionally small so it can be audited by hand.
-- Future work could add richer domain-specific input adapters.
-- The model is a local demonstration and does not claim production use.
+## Quality Gate
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
+```
+
+The audit command checks repository structure and README constraints before it delegates to the verifier.
+
+## Expansion Ideas
+
+- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
+- Add a short report command that prints the score breakdown for a single scenario.
+- Add malformed input fixtures so the failure path is as visible as the happy path.
+- Add one more chess and game engines fixture that focuses on a malformed or borderline input.
+
+## Scope
+
+The repository favors determinism over breadth. It does not pull live data, keep secrets, or depend on network access for verification.
