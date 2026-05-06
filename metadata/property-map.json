@@ -1,0 +1,28 @@
+{
+  "repo": "tensor-move-clock-scope",
+  "language": "Elixir",
+  "category": "Chess and game engines",
+  "goal": "Build an Elixir toolkit that studies clock behavior through layout fixtures, with stable geometry snapshots and no production deployment claims.",
+  "weights": {
+    "signal": 3,
+    "slack": 2,
+    "confidence": 2,
+    "drag": 2
+  },
+  "thresholds": {
+    "ship": 196,
+    "watch": 100
+  },
+  "properties": [
+    "raising signal cannot reduce score",
+    "raising drag cannot improve score",
+    "lane labels must match configured thresholds",
+    "golden fixture ids must remain unique"
+  ],
+  "fixture_files": [
+    "fixtures/golden/scoreboard.csv",
+    "fixtures/golden/lane-matrix.csv",
+    "fixtures/fuzz/mutations.csv",
+    "fixtures/fuzz/boundary-cases.jsonl"
+  ]
+}
